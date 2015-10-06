@@ -15,15 +15,5 @@ urlpatterns += [
                                namespace='rest_framework')),
 ]
 
-urlpatterns += [
-    url(r'^rest-auth/', include('rest_auth.urls'),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
-    url(r'^accounts/', include('allauth.urls')),
-]
-
-urlpatterns += [
-    url(r'^rest-auth/facebook/$', views.FacebookLogin.as_view(), name='fb_login'),
-]
-
 urlpatterns = format_suffix_patterns(urlpatterns)
 

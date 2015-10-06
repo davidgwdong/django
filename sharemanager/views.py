@@ -7,8 +7,6 @@ from sharemanager.serializers import UserSerializer
 from rest_framework import permissions
 from sharemanager.permissions import IsOwnerOrReadOnly
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
-from rest_auth.registration.views import SocialLoginView
 
 
 class ShareList(generics.ListCreateAPIView):
@@ -35,5 +33,3 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class FacebookLogin(SocialLoginView):
-    adapter_class = FacebookOAuth2Adapter
