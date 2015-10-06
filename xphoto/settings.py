@@ -38,8 +38,23 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
     'sharemanager',
+
+    # The Django sites framework is required
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+
 )
+
+SITE_ID = 1
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
@@ -78,6 +93,14 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 WSGI_APPLICATION = 'xphoto.wsgi.application'
 
