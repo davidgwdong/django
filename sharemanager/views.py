@@ -7,9 +7,19 @@ from sharemanager.serializers import UserSerializer
 from rest_framework import permissions
 from sharemanager.permissions import IsOwnerOrReadOnly
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
-from rest_auth.registration.views import SocialLoginView
 
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import permission_classes
+
+from allauth.socialaccount import providers
+from allauth.socialaccount.models import SocialLogin, SocialToken, SocialApp
+from allauth.socialaccount.providers.facebook.views import fb_complete_login
+from allauth.socialaccount.helpers import complete_social_login
+from sharemanager.auth import EverybodyCanAuthentication
+
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
 
 
 class ShareList(generics.ListCreateAPIView):
@@ -36,5 +46,45 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class FacebookLogin(SocialLoginView):
-    adapter_class = FacebookOAuth2Adapter
+# Add a user to the system based on facebook token
+class FacebookLoginOrSignup(APIView):   
+
+    permission_classes = (AllowAny,)
+
+    # this is a public api!!!
+    authentication_classes = (EverybodyCanAuthentication,)
+
+    def dispatch(self, *args, **kwargs):
+        return super(FacebookLoginOrSignup, self).dispatch(*args, **kwargs)
+
+    def post(self, request):
+        data = JSONParser().parse(request)
+        access_token = data.get('access_token', '')
+        email = data.get('email','') # Get email
+        #logging.info('Creating ticket "%s"' % access_token)
+
+        try:
+            app = SocialApp.objects.get(provider="facebook")
+            token = SocialToken(app=app, token=access_token)
+
+            # check token against facebook
+            login = fb_complete_login(reqeust, app, token)
+            login.token = token
+            login.state = SocialLogin.state_from_request(request)
+
+            # add or update the user into users table
+            ret = complete_social_login(request, login)
+
+            # if we get here we've succeeded
+            return Response(status=200, data={
+                'success': True,
+                'username': request.user.username,
+                'user_id': request.user.pk,
+            })
+
+        except:
+ 
+            return Response(status=401 ,data={
+                'success': False,
+                'reason': "Bad Access Token",
+            })

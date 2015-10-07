@@ -2,6 +2,8 @@ from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from sharemanager import views
 from django.conf.urls import include
+from django.views.decorators.csrf import csrf_exempt
+
 
 urlpatterns = [
     url(r'^sharemanager/$', views.ShareList.as_view()),
@@ -19,7 +21,7 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    url(r'^rest-auth/facebook/$', views.FacebookLogin.as_view(), name='fb_login'),
+    url(r'^facebook-signup/$', csrf_exempt(views.FacebookLoginOrSignup.as_view()), name='facebook-login-signup'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
