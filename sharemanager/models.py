@@ -7,7 +7,7 @@ class ShareManager(models.Model):
     owneruuid = models.UUIDField()
     sharetouuid = models.UUIDField()
     sharetoemail = models.EmailField()
-    data = models.FileField()
+    data = models.URLField()
     expire = models.DateTimeField()
     owner = models.ForeignKey('auth.User', related_name='sharemanager')
 
