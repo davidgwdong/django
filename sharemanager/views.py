@@ -21,7 +21,6 @@ from sharemanager.auth import EverybodyCanAuthentication
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 
-
 class ShareList(generics.ListCreateAPIView):
     queryset = ShareManager.objects.all()
     serializer_class = ShareManagerSerializer
@@ -60,21 +59,18 @@ class FacebookLoginOrSignup(APIView):
     def post(self, request):
         data = JSONParser().parse(request)
         access_token = data.get('access_token', '')
-        email = data.get('email','') # Get email
-        #logging.info('Creating ticket "%s"' % access_token)
 
         try:
             app = SocialApp.objects.get(provider="facebook")
             token = SocialToken(app=app, token=access_token)
 
             # check token against facebook
-            login = fb_complete_login(reqeust, app, token)
+            login = fb_complete_login(request, app, token)
             login.token = token
             login.state = SocialLogin.state_from_request(request)
 
             # add or update the user into users table
             ret = complete_social_login(request, login)
-
             # if we get here we've succeeded
             return Response(status=200, data={
                 'success': True,

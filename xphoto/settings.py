@@ -97,7 +97,6 @@ TEMPLATES = [
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
-
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 )
@@ -115,7 +114,18 @@ DATABASES = {
     }
 }
 
-
+SOCIALACCOUNT_PROVIDERS = {
+'facebook': {
+    'SCOPE': ['email', 'user_friends'],
+    'METHOD': 'oauth2',
+    'FIELDS': [
+        'id',
+        'email',
+        'name',
+    ],
+    'LOCALE_FUNC': lambda request: 'en_US',
+    }
+}
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -137,8 +147,7 @@ SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 SOCIALACCOUNT_EMAIL_REQUIRED = False
 SOCIALACCOUNT_QUERY_EMAIL = False
 
-SOCIAL_AUTH_FACEBOOK_KEY = "1647163498888253"
-SOCIAL_AUTH_FACEBOOK_SECRET = "174283398eeb0e3b0b15115aff0582aa"
+ACCOUNT_ADAPTER = 'sharemanager.adapter.MessageFreeAdapter'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
