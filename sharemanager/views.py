@@ -18,7 +18,7 @@ from allauth.socialaccount.providers.facebook.views import fb_complete_login
 from allauth.socialaccount.helpers import complete_social_login
 from sharemanager.auth import EverybodyCanAuthentication
 
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 
 class ShareList(generics.ListCreateAPIView):
@@ -26,6 +26,7 @@ class ShareList(generics.ListCreateAPIView):
     serializer_class = ShareManagerSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly)
     authentication_classes = (SessionAuthentication, BasicAuthentication)
+    parser_classes = (MultiPartParser, FormParser,)
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -84,3 +85,4 @@ class FacebookLoginOrSignup(APIView):
                 'success': False,
                 'reason': "Bad Access Token",
             })
+

@@ -24,5 +24,6 @@ urlpatterns += [
     url(r'^facebook-signup/$', csrf_exempt(views.FacebookLoginOrSignup.as_view()), name='facebook-login-signup'),
 ]
 
+
 urlpatterns = format_suffix_patterns(urlpatterns)
 
