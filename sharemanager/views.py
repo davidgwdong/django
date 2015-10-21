@@ -20,6 +20,7 @@ from sharemanager.auth import EverybodyCanAuthentication
 
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.response import Response
+from sendphoto import sendNotification
 
 class ShareList(generics.ListCreateAPIView):
     queryset = ShareManager.objects.all()
@@ -29,6 +30,7 @@ class ShareList(generics.ListCreateAPIView):
     parser_classes = (MultiPartParser, FormParser,)
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+        sendNotification(self.request)
 
 
 class ShareDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -72,6 +74,7 @@ class FacebookLoginOrSignup(APIView):
 
             # add or update the user into users table
             ret = complete_social_login(request, login)
+
             # if we get here we've succeeded
             return Response(status=200, data={
                 'success': True,

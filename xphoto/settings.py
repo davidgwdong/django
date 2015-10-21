@@ -150,5 +150,16 @@ SOCIALACCOUNT_QUERY_EMAIL = False
 ACCOUNT_ADAPTER = 'sharemanager.adapter.MessageFreeAdapter'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+EMAIL_USE_TLS = True
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = 'xphotoserver@gmail.com'
+
+EMAIL_HOST_PASSWORD = '8HLn3j2w'
+
+EMAIL_PORT = 587
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 STATIC_URL = '/static/'
