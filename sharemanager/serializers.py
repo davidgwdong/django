@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from sharemanager.models import ShareManager
-from django.contrib.auth.models import User
+from sharemanager.models import ShareManager, XPUser
 
 
 class ShareManagerSerializer(serializers.ModelSerializer):
@@ -13,5 +12,5 @@ class UserSerializer(serializers.ModelSerializer):
     sharemanager = serializers.PrimaryKeyRelatedField(many=True, queryset=ShareManager.objects.all())
 
     class Meta:
-        model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'sharemanager')
+        model = XPUser
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'gcm_token', 'sharemanager')

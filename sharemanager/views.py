@@ -1,8 +1,7 @@
 from django.shortcuts import render
-from sharemanager.models import ShareManager
+from sharemanager.models import ShareManager, XPUser
 from sharemanager.serializers import ShareManagerSerializer
 from rest_framework import generics
-from django.contrib.auth.models import User
 from sharemanager.serializers import UserSerializer
 from rest_framework import permissions
 from sharemanager.permissions import IsOwnerOrReadOnly
@@ -22,6 +21,7 @@ from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 from sendphoto import sendNotification
 
+
 class ShareList(generics.ListCreateAPIView):
     queryset = ShareManager.objects.all()
     serializer_class = ShareManagerSerializer
@@ -40,12 +40,12 @@ class ShareDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
 
 class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
+    queryset = XPUser.objects.all()
     serializer_class = UserSerializer
 
 
 class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
+    queryset = XPUser.objects.all()
     serializer_class = UserSerializer
 
 # Add a user to the system based on facebook token

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
 class ShareManager(models.Model):
@@ -7,7 +8,13 @@ class ShareManager(models.Model):
     sharetoemail = models.EmailField()
     data = models.FileField(upload_to='data')
     expire = models.DateTimeField()
-    owner = models.ForeignKey('auth.User', related_name='sharemanager')
+    owner = models.ForeignKey('sharemanager.XPUser', related_name='sharemanager')
 
     class Meta:
         ordering = ('created',)
+
+class XPUser(AbstractUser):
+    gcm_token = models.CharField(max_length=300)
+    # to enforce that you require email field to be associated with
+    # every user at registration
+    REQUIRED_FIELDS = ["email"]
