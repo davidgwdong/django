@@ -62,6 +62,7 @@ class FacebookLoginOrSignup(APIView):
     def post(self, request):
         data = JSONParser().parse(request)
         access_token = data.get('access_token', '')
+        gcm_token = data.get('gcm_token', '')
 
         try:
             app = SocialApp.objects.get(provider="facebook")
@@ -70,6 +71,7 @@ class FacebookLoginOrSignup(APIView):
             # check token against facebook
             login = fb_complete_login(request, app, token)
             login.token = token
+            login.user.gcm_token = gcm_token
             login.state = SocialLogin.state_from_request(request)
 
             # add or update the user into users table
