@@ -29,8 +29,8 @@ class ShareList(generics.ListCreateAPIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     parser_classes = (MultiPartParser, FormParser,)
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-        sendNotification(self.request)
+        instance = serializer.save(owner=self.request.user)
+        sendNotification(instance)
 
 
 class ShareDetail(generics.RetrieveUpdateDestroyAPIView):
