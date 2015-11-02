@@ -3,6 +3,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from sharemanager import views
 from django.conf.urls import include
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 
 urlpatterns = [
@@ -10,6 +11,7 @@ urlpatterns = [
     url(r'^sharemanager/(?P<pk>[0-9]+)/$', views.ShareDetail.as_view()),
     url(r'^users/$', views.UserList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
+    url(r'^data/(?P<path>.*)$','django.views.static.serve', {'document_root':settings.MEDIA_ROOT,'show_indexes':True}),
 ]
 
 urlpatterns += [
