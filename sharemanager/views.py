@@ -4,7 +4,7 @@ from sharemanager.serializers import ShareManagerSerializer
 from rest_framework import generics
 from sharemanager.serializers import UserSerializer
 from rest_framework import permissions
-from sharemanager.permissions import IsOwnerOrReadOnly
+from sharemanager.permissions import IsOwnerOrReadOnly, IsSelf
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 from rest_framework.views import APIView
@@ -42,11 +42,16 @@ class ShareDetail(generics.RetrieveUpdateDestroyAPIView):
 class UserList(generics.ListAPIView):
     queryset = XPUser.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
 
 
-class UserDetail(generics.RetrieveAPIView):
+class UserDetail(generics.RetrieveUpdateAPIView):
     queryset = XPUser.objects.all()
     serializer_class = UserSerializer
+    #(permission for GET, permission for POST)
+    permission_classes = (permissions.IsAuthenticated,IsSelf)
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
 
 # Add a user to the system based on facebook token
 class FacebookLoginOrSignup(APIView):   
@@ -82,6 +87,9 @@ class FacebookLoginOrSignup(APIView):
                 'success': True,
                 'username': request.user.username,
                 'user_id': request.user.pk,
+                'first_name': request.user.first_name,
+                'last_name': request.user.last_name,
+                'email': request.user.email,
             })
 
         except:
