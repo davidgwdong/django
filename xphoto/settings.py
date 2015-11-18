@@ -141,7 +141,7 @@ USE_TZ = True
 
 MEDIA_ROOT = '/home/ddong/AndroidStudioProjects/XPhotoServer/xphoto/data/'
 STATIC_ROOT = '/home/ddong/AndroidStudioProjects/XPhotoServer/xphoto/'
-MEDIA_URL = 'http://10.133.30.31:8000/data/'
+MEDIA_URL = 'http://192.168.0.113:8000/data/'
 
 ########### Custom Auth model
 AUTH_USER_MODEL = 'sharemanager.XPUser'
