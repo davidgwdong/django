@@ -19,6 +19,7 @@ def send_gcm_message(user, data_id):
         http://developer.android.com/google/gcm/gcm.html#request
     """
     print data_id
+    print user.gcm_token
     regs_id = list()
     regs_id.append(user.gcm_token)
 
@@ -29,7 +30,6 @@ def send_gcm_message(user, data_id):
         'data': {"message":str(message)}
     }
 
-    print settings.GCM_APIKEY
     headers = {
         'UserAgent': "GCM-Server",
         'Content-Type': 'application/json',
